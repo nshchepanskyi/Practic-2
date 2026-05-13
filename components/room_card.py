@@ -14,33 +14,16 @@ def room_card(room):
     )
 
     return ft.Container(
-        width=80,
-        height=80,
-
-        border_radius=18,
+        width=100,
+        height=100,
 
         bgcolor="white",
 
-        border=ft.border.Border(
-            top=ft.border.BorderSide(
-                2,
-                color,
-            ),
+        border_radius=20,
 
-            bottom=ft.border.BorderSide(
-                2,
-                color,
-            ),
-
-            left=ft.border.BorderSide(
-                2,
-                color,
-            ),
-
-            right=ft.border.BorderSide(
-                2,
-                color,
-            ),
+        shadow=ft.BoxShadow(
+            blur_radius=15,
+            color="#00000010",
         ),
 
         alignment=ft.Alignment(0, 0),
@@ -50,11 +33,19 @@ def room_card(room):
                 ft.Icon(
                     ft.Icons.BED,
                     color=color,
+                    size=32,
                 ),
 
                 ft.Text(
                     room.room_number,
+                    size=18,
                     weight=ft.FontWeight.BOLD,
+                ),
+
+                ft.Text(
+                    room.status,
+                    size=12,
+                    color=color,
                 ),
             ],
 

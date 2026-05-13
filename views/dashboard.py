@@ -2,38 +2,25 @@ import flet as ft
 
 from hotel_data import (
     rooms,
-    guests,
     reservations,
+    guests,
 )
 
 from components.stat_card import stat_card
 from components.room_card import room_card
-from components.activity_card import activity_card
 
 
 def dashboard_view(page):
     room_grid = ft.GridView(
-        runs_count=4,
-        spacing=10,
-        run_spacing=10,
-        expand=False,
-        height=400,
+        runs_count=5,
+        spacing=15,
+        run_spacing=15,
+        height=300,
     )
 
     for room in rooms:
         room_grid.controls.append(
             room_card(room)
-        )
-
-    activity = ft.Column()
-
-    for reservation in reservations:
-        activity.controls.append(
-            activity_card(
-                reservation.guest.name,
-                f"Room {reservation.room.room_number}",
-                reservation.status,
-            )
         )
 
     return ft.Column(
@@ -49,24 +36,31 @@ def dashboard_view(page):
             ft.Row(
                 [
                     stat_card(
-                        "Occupancy",
-                        f"{len(reservations)}%",
-                        ft.Icons.HOTEL,
+                        "Revenue",
+                        "$18,420",
+                        ft.Icons.ATTACH_MONEY,
                         "#42C59A",
                     ),
 
                     stat_card(
-                        "Revenue",
-                        "$18,420",
-                        ft.Icons.ATTACH_MONEY,
+                        "Reservations",
+                        str(len(reservations)),
+                        ft.Icons.BOOK,
                         "#13294B",
                     ),
 
                     stat_card(
-                        "Check-ins",
-                        str(len(reservations)),
-                        ft.Icons.LOGIN,
+                        "Guests",
+                        str(len(guests)),
+                        ft.Icons.PEOPLE,
                         "#5B8DEF",
+                    ),
+
+                    stat_card(
+                        "Rooms",
+                        str(len(rooms)),
+                        ft.Icons.HOTEL,
+                        "#F5A623",
                     ),
                 ],
 
@@ -75,61 +69,29 @@ def dashboard_view(page):
 
             ft.Container(height=30),
 
-            ft.Row(
-                [
-                    ft.Container(
-                        expand=1,
+            ft.Container(
+                bgcolor="white",
 
-                        bgcolor="white",
+                border_radius=25,
 
-                        border_radius=20,
+                padding=25,
 
-                        padding=20,
-
-                        content=ft.Column(
-                            [
-                                ft.Text(
-                                    "Room Status",
-                                    size=22,
-                                    weight=ft.FontWeight.BOLD,
-                                ),
-
-                                ft.Container(height=20),
-
-                                room_grid,
-                            ]
+                content=ft.Column(
+                    [
+                        ft.Text(
+                            "Room Status",
+                            size=24,
+                            weight=ft.FontWeight.BOLD,
                         ),
-                    ),
 
-                    ft.Container(
-                        width=400,
+                        ft.Container(height=20),
 
-                        bgcolor="white",
-
-                        border_radius=20,
-
-                        padding=20,
-
-                        content=ft.Column(
-                            [
-                                ft.Text(
-                                    "Today's Activity",
-                                    size=22,
-                                    weight=ft.FontWeight.BOLD,
-                                ),
-
-                                ft.Container(height=20),
-
-                                activity,
-                            ]
-                        ),
-                    ),
-                ],
-
-                expand=True,
+                        room_grid,
+                    ]
+                ),
             ),
         ],
 
-        expand=True,
         scroll=ft.ScrollMode.AUTO,
+        expand=True,
     )

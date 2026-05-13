@@ -4,45 +4,46 @@ import flet as ft
 PRIMARY = "#13294B"
 
 
-def sidebar(change_page):
+def navbar(change_page):
     def nav(index):
         change_page(index)
 
     return ft.Container(
-        width=90,
+        width=100,
 
         bgcolor=PRIMARY,
 
-        border_radius=20,
+        border_radius=25,
 
         padding=20,
 
         content=ft.Column(
             [
                 ft.Container(
-                    width=50,
-                    height=50,
-
-                    border_radius=15,
+                    width=55,
+                    height=55,
 
                     bgcolor="#42C59A",
+
+                    border_radius=18,
 
                     alignment=ft.Alignment(0, 0),
 
                     content=ft.Icon(
                         ft.Icons.HOTEL,
                         color="white",
+                        size=28,
                     ),
                 ),
 
-                ft.Container(height=30),
+                ft.Container(height=40),
 
                 ft.IconButton(
                     icon=ft.Icons.DASHBOARD,
 
                     icon_color="white",
 
-                    icon_size=30,
+                    icon_size=32,
 
                     on_click=lambda e: nav(0),
                 ),
@@ -52,7 +53,7 @@ def sidebar(change_page):
 
                     icon_color="white",
 
-                    icon_size=30,
+                    icon_size=32,
 
                     on_click=lambda e: nav(1),
                 ),
@@ -62,9 +63,29 @@ def sidebar(change_page):
 
                     icon_color="white",
 
-                    icon_size=30,
+                    icon_size=32,
 
                     on_click=lambda e: nav(2),
+                ),
+
+                ft.IconButton(
+                    icon=ft.Icons.PEOPLE,
+
+                    icon_color="white",
+
+                    icon_size=32,
+
+                    on_click=lambda e: nav(3),
+                ),
+
+                ft.IconButton(
+                    icon=ft.Icons.ROOM_SERVICE,
+
+                    icon_color="white",
+
+                    icon_size=32,
+
+                    on_click=lambda e: nav(4),
                 ),
             ]
         ),

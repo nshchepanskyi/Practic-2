@@ -2,32 +2,35 @@ import flet as ft
 
 from hotel_data import seed_data
 
-from components.sidebar import sidebar
+from components.navbar import navbar
+from components.topbar import topbar
 
 from views.dashboard import dashboard_view
 from views.rooms import rooms_view
 from views.reservations import reservations_view
+from views.guests import guests_view
+from views.services import services_view
 
 
-BG = "#F5F7FB"
+BACKGROUND = "#F5F7FB"
 
 
 def main(page: ft.Page):
     page.title = "GrandStay Hotel"
-    page.theme_mode = ft.ThemeMode.LIGHT
-    page.bgcolor = BG
 
-    page.window.width = 1600
+    page.theme_mode = ft.ThemeMode.LIGHT
+
+    page.bgcolor = BACKGROUND
+
+    page.window.width = 1700
     page.window.height = 950
 
     page.padding = 15
-    page.spacing = 0
 
     seed_data()
 
     content = ft.Container(
         expand=True,
-        padding=20,
     )
 
     def change_page(index):
@@ -40,6 +43,12 @@ def main(page: ft.Page):
         elif index == 2:
             content.content = reservations_view(page)
 
+        elif index == 3:
+            content.content = guests_view(page)
+
+        elif index == 4:
+            content.content = services_view(page)
+
         page.update()
 
     content.content = dashboard_view(page)
@@ -47,10 +56,19 @@ def main(page: ft.Page):
     page.add(
         ft.Row(
             [
-                sidebar(change_page),
+                navbar(change_page),
 
-                content,
+                ft.Column(
+                    [
+                        topbar(),
+
+                        content,
+                    ],
+
+                    expand=True,
+                ),
             ],
+
             expand=True,
         )
     )

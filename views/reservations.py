@@ -9,27 +9,33 @@ from hotel_data import (
 
 def reservations_view(page):
     guest_name = ft.TextField(
-        label="Guest Name"
+        label="Guest Name",
+        width=250,
     )
 
     guest_phone = ft.TextField(
-        label="Phone"
+        label="Phone",
+        width=250,
     )
 
     guest_email = ft.TextField(
-        label="Email"
+        label="Email",
+        width=250,
     )
 
     room_number = ft.TextField(
-        label="Room Number"
+        label="Room Number",
+        width=250,
     )
 
     check_in = ft.TextField(
-        label="Check In"
+        label="Check In",
+        width=250,
     )
 
     check_out = ft.TextField(
-        label="Check Out"
+        label="Check Out",
+        width=250,
     )
 
     reservation_table = ft.DataTable(
@@ -80,8 +86,17 @@ def reservations_view(page):
                         ),
 
                         ft.DataCell(
-                            ft.Text(
-                                reservation.status
+                            ft.Container(
+                                padding=8,
+
+                                border_radius=12,
+
+                                bgcolor="#13294B",
+
+                                content=ft.Text(
+                                    reservation.status,
+                                    color="white",
+                                ),
                             )
                         ),
                     ]
@@ -116,29 +131,84 @@ def reservations_view(page):
                 weight=ft.FontWeight.BOLD,
             ),
 
-            ft.Row(
-                [
-                    guest_name,
-                    guest_phone,
-                    guest_email,
-                ]
+            ft.Container(height=20),
+
+            ft.Container(
+                bgcolor="white",
+
+                border_radius=20,
+
+                padding=20,
+
+                content=ft.Column(
+                    [
+                        ft.Text(
+                            "Create Reservation",
+                            size=22,
+                            weight=ft.FontWeight.BOLD,
+                        ),
+
+                        ft.Container(height=20),
+
+                        ft.Row(
+                            [
+                                guest_name,
+                                guest_phone,
+                                guest_email,
+                            ],
+
+                            wrap=True,
+                        ),
+
+                        ft.Container(height=15),
+
+                        ft.Row(
+                            [
+                                room_number,
+                                check_in,
+                                check_out,
+
+                                ft.ElevatedButton(
+                                    "Create",
+                                    icon=ft.Icons.ADD,
+                                    height=50,
+                                    on_click=create_click,
+                                ),
+                            ],
+
+                            wrap=True,
+                        ),
+                    ]
+                ),
             ),
 
-            ft.Row(
-                [
-                    room_number,
-                    check_in,
-                    check_out,
+            ft.Container(height=20),
 
-                    ft.ElevatedButton(
-                        "Create Reservation",
-                        on_click=create_click,
-                    ),
-                ]
+            ft.Container(
+                bgcolor="white",
+
+                border_radius=20,
+
+                padding=20,
+
+                expand=True,
+
+                content=ft.Column(
+                    [
+                        ft.Text(
+                            "Reservation List",
+                            size=22,
+                            weight=ft.FontWeight.BOLD,
+                        ),
+
+                        ft.Container(height=20),
+
+                        reservation_table,
+                    ]
+                ),
             ),
-
-            reservation_table,
         ],
 
         scroll=ft.ScrollMode.AUTO,
+        expand=True,
     )

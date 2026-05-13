@@ -8,18 +8,18 @@ def stat_card(
     color,
 ):
     return ft.Container(
-        width=250,
-        height=150,
+        width=260,
+        height=160,
 
         bgcolor="white",
 
-        border_radius=20,
+        border_radius=22,
 
         padding=20,
 
         shadow=ft.BoxShadow(
-            blur_radius=20,
-            color="#00000015",
+            blur_radius=25,
+            color="#00000010",
         ),
 
         content=ft.Column(
@@ -33,10 +33,10 @@ def stat_card(
                         ),
 
                         ft.Container(
-                            width=40,
-                            height=40,
+                            width=45,
+                            height=45,
 
-                            border_radius=12,
+                            border_radius=14,
 
                             bgcolor=color,
 
@@ -52,11 +52,11 @@ def stat_card(
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 ),
 
-                ft.Container(height=20),
+                ft.Container(height=25),
 
                 ft.Text(
                     value,
-                    size=32,
+                    size=34,
                     weight=ft.FontWeight.BOLD,
                 ),
             ]
