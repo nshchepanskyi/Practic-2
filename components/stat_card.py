@@ -11,7 +11,7 @@ def stat_card(
         width=260,
         height=160,
 
-        bgcolor="white",
+        bgcolor=ft.Colors.WHITE,
 
         border_radius=22,
 
@@ -19,7 +19,7 @@ def stat_card(
 
         shadow=ft.BoxShadow(
             blur_radius=25,
-            color="#00000010",
+            color=ft.Colors.BLACK12,
         ),
 
         content=ft.Column(
@@ -29,7 +29,7 @@ def stat_card(
                         ft.Text(
                             title,
                             size=16,
-                            color="grey",
+                            color=ft.Colors.GREY_600,
                         ),
 
                         ft.Container(
@@ -44,7 +44,7 @@ def stat_card(
 
                             content=ft.Icon(
                                 icon,
-                                color="white",
+                                color=ft.Colors.WHITE,
                             ),
                         ),
                     ],
@@ -58,6 +58,7 @@ def stat_card(
                     value,
                     size=34,
                     weight=ft.FontWeight.BOLD,
+                    color=ft.Colors.BLUE_GREY_900,
                 ),
             ]
         ),

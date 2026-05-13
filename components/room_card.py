@@ -3,27 +3,28 @@ import flet as ft
 
 def room_card(room):
     colors = {
-        "Available": "#42C59A",
-        "Occupied": "#13294B",
-        "Cleaning": "#F5A623",
+        "Available": ft.Colors.GREEN_400,
+        "Occupied": ft.Colors.BLUE_700,
+        "Cleaning": ft.Colors.ORANGE_400,
+        "Maintenance": ft.Colors.RED_400,
     }
 
     color = colors.get(
         room.status,
-        "#42C59A",
+        ft.Colors.GREEN_400,
     )
 
     return ft.Container(
         width=100,
         height=100,
 
-        bgcolor="white",
+        bgcolor=ft.Colors.WHITE,
 
         border_radius=20,
 
         shadow=ft.BoxShadow(
             blur_radius=15,
-            color="#00000010",
+            color=ft.Colors.BLACK12,
         ),
 
         alignment=ft.Alignment(0, 0),
@@ -40,6 +41,7 @@ def room_card(room):
                     room.room_number,
                     size=18,
                     weight=ft.FontWeight.BOLD,
+                    color=ft.Colors.BLUE_GREY_900,
                 ),
 
                 ft.Text(

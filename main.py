@@ -12,7 +12,7 @@ from views.guests import guests_view
 from views.services import services_view
 
 
-BACKGROUND = "#F5F7FB"
+BACKGROUND = ft.Colors.GREY_100
 
 
 def main(page: ft.Page):
