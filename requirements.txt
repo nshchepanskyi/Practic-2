@@ -1,0 +1,4 @@
+# GrandStay Hotel Management System Requirements
+# Currently uses only Python Standard Library (3.x)
+# Future Flet integration will require:
+# flet
