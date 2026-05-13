@@ -1,61 +1,122 @@
-"""
-views/dashboard.py - Hotel Dashboard and Reports.
-"""
+import flet as ft
 
 from hotel_data import (
-    get_revenue_report, get_all_rooms, get_rooms_by_status, 
-    reservations, guests
+    get_revenue_report,
+    get_all_rooms,
+    get_rooms_by_status,
+    reservations,
+    guests,
 )
 
-def show_dashboard_menu():
-    while True:
-        print("\n--- Hotel Dashboard & Reports ---")
-        print("1. Revenue Report")
-        print("2. Occupancy Summary")
-        print("3. Guest Activity Report")
-        print("4. Quick Statistics")
-        print("0. Back to Main Menu")
-        
-        choice = input("Select an option: ")
-        
-        if choice == '1':
-            report = get_revenue_report()
-            print("\n--- Revenue Report ---")
-            print(f"Room Revenue:    ${report['room_revenue']:,.2f}")
-            print(f"Service Revenue: ${report['service_revenue']:,.2f}")
-            print(f"Total Revenue:   ${report['total']:,.2f}")
-            
-        elif choice == '2':
-            total_rooms = len(get_all_rooms())
-            avail = len(get_rooms_by_status("Available"))
-            occ = len(get_rooms_by_status("Occupied"))
-            maint = len(get_rooms_by_status("Maintenance"))
-            
-            print("\n--- Occupancy Summary ---")
-            print(f"Total Rooms:  {total_rooms}")
-            print(f"Available:    {avail}")
-            print(f"Occupied:     {occ}")
-            print(f"Maintenance:  {maint}")
-            if total_rooms > 0:
-                print(f"Occupancy Rate: {(occ/total_rooms)*100:.1f}%")
-                
-        elif choice == '3':
-            print("\n--- Guest Activity Report ---")
-            if not guests:
-                print("No guest data.")
-            else:
-                for g in guests:
-                    total_exp = g.get_total_expenses()
-                    status = "Active" if any(res.guest_id == g.guest_id and res.status == "Checked-In" for res in reservations) else "Inactive"
-                    print(f"Guest: {g.name:<15} | ID: {g.guest_id:<6} | Expenses: ${total_exp:<8,.2f} | Status: {status}")
-                    
-        elif choice == '4':
-            print("\n--- Quick Statistics ---")
-            print(f"Total Reservations: {len(reservations)}")
-            print(f"Total Unique Guests: {len(guests)}")
-            print(f"Active Check-ins: {len([r for r in reservations if r.status == 'Checked-In'])}")
-            
-        elif choice == '0':
-            break
-        else:
-            print("Invalid choice.")
+
+def stat_card(
+    title,
+    value,
+    icon,
+):
+    return ft.Container(
+        width=280,
+        padding=20,
+        border_radius=20,
+        bgcolor=ft.Colors.BLUE_GREY_900,
+        content=ft.Column(
+            [
+                ft.Icon(
+                    icon,
+                    size=40,
+                ),
+
+                ft.Text(
+                    title,
+                    size=18,
+                    weight=ft.FontWeight.BOLD,
+                ),
+
+                ft.Text(
+                    value,
+                    size=28,
+                ),
+            ]
+        ),
+    )
+
+
+def dashboard_view(
+    page: ft.Page,
+):
+    content = ft.Row(
+        wrap=True,
+        spacing=20,
+    )
+
+    def refresh(e=None):
+        content.controls.clear()
+
+        report = get_revenue_report()
+
+        total_rooms = len(
+            get_all_rooms()
+        )
+
+        occupied = len(
+            get_rooms_by_status(
+                "Occupied"
+            )
+        )
+
+        occupancy = 0
+
+        if total_rooms > 0:
+            occupancy = (
+                occupied / total_rooms
+            ) * 100
+
+        content.controls.extend(
+            [
+                stat_card(
+                    "Total Revenue",
+                    f"${report['total']}",
+                    ft.Icons.ATTACH_MONEY,
+                ),
+
+                stat_card(
+                    "Reservations",
+                    str(
+                        len(
+                            reservations
+                        )
+                    ),
+                    ft.Icons.BOOK,
+                ),
+
+                stat_card(
+                    "Guests",
+                    str(len(guests)),
+                    ft.Icons.PEOPLE,
+                ),
+
+                stat_card(
+                    "Occupancy",
+                    f"{occupancy:.1f}%",
+                    ft.Icons.HOTEL,
+                ),
+            ]
+        )
+
+        page.update()
+
+    refresh()
+
+    return ft.Column(
+        [
+            ft.ElevatedButton(
+                "Refresh Dashboard",
+                icon=ft.Icons.REFRESH,
+                on_click=refresh,
+            ),
+
+            ft.Container(height=20),
+
+            content,
+        ]
+    )

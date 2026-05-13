@@ -1,54 +1,159 @@
-"""
-views/rooms.py - Interaction logic for Room Management.
-"""
+import flet as ft
 
-from hotel_data import add_room, remove_room, get_all_rooms, get_rooms_by_status, update_room_status
+from hotel_data import (
+    add_room,
+    get_all_rooms,
+    remove_room,
+)
 
-def show_rooms_menu():
-    while True:
-        print("\n--- Room Management ---")
-        print("1. Show All Rooms")
-        print("2. Show Available Rooms")
-        print("3. Show Occupied Rooms")
-        print("4. Add New Room")
-        print("5. Remove Room")
-        print("6. Change Room Status")
-        print("0. Back to Main Menu")
-        
-        choice = input("Select an option: ")
-        
-        if choice == '1':
-            display_rooms(get_all_rooms())
-        elif choice == '2':
-            display_rooms(get_rooms_by_status("Available"))
-        elif choice == '3':
-            display_rooms(get_rooms_by_status("Occupied"))
-        elif choice == '4':
-            num = input("Room Number: ")
-            rtype = input("Room Type (Single/Double/Suite): ")
-            price = float(input("Price per Night: "))
-            success, msg = add_room(num, rtype, price)
-            print(msg)
-        elif choice == '5':
-            num = input("Enter Room Number to remove: ")
-            success, msg = remove_room(num)
-            print(msg)
-        elif choice == '6':
-            num = input("Room Number: ")
-            status = input("New Status (Available/Occupied/Maintenance): ")
-            success, msg = update_room_status(num, status)
-            print(msg)
-        elif choice == '0':
-            break
-        else:
-            print("Invalid choice.")
 
-def display_rooms(room_list):
-    if not room_list:
-        print("No rooms to display.")
-        return
-    
-    print(f"{'Room #':<10} {'Type':<15} {'Price':<10} {'Status':<15}")
-    print("-" * 50)
-    for r in room_list:
-        print(f"{r.room_number:<10} {r.room_type:<15} ${r.price_per_night:<9} {r.status:<15}")
+def rooms_view(page: ft.Page):
+    table = ft.DataTable(
+        columns=[
+            ft.DataColumn(
+                ft.Text("Room")
+            ),
+
+            ft.DataColumn(
+                ft.Text("Type")
+            ),
+
+            ft.DataColumn(
+                ft.Text("Price")
+            ),
+
+            ft.DataColumn(
+                ft.Text("Status")
+            ),
+        ],
+        rows=[],
+    )
+
+    room_number = ft.TextField(
+        label="Room Number"
+    )
+
+    room_type = ft.Dropdown(
+        label="Room Type",
+        options=[
+            ft.dropdown.Option(
+                "Single"
+            ),
+
+            ft.dropdown.Option(
+                "Double"
+            ),
+
+            ft.dropdown.Option(
+                "Suite"
+            ),
+        ],
+    )
+
+    room_price = ft.TextField(
+        label="Price"
+    )
+
+    delete_room = ft.TextField(
+        label="Delete Room"
+    )
+
+    def refresh():
+        table.rows.clear()
+
+        for r in get_all_rooms():
+            table.rows.append(
+                ft.DataRow(
+                    cells=[
+                        ft.DataCell(
+                            ft.Text(
+                                r.room_number
+                            )
+                        ),
+
+                        ft.DataCell(
+                            ft.Text(
+                                r.room_type
+                            )
+                        ),
+
+                        ft.DataCell(
+                            ft.Text(
+                                f"${r.price_per_night}"
+                            )
+                        ),
+
+                        ft.DataCell(
+                            ft.Text(
+                                r.status
+                            )
+                        ),
+                    ]
+                )
+            )
+
+        page.update()
+
+    def add_click(e):
+        success, msg = add_room(
+            room_number.value,
+            room_type.value,
+            float(
+                room_price.value
+            ),
+        )
+
+        page.snack_bar = ft.SnackBar(
+            ft.Text(msg)
+        )
+
+        page.snack_bar.open = True
+
+        refresh()
+
+    def delete_click(e):
+        success, msg = remove_room(
+            delete_room.value
+        )
+
+        page.snack_bar = ft.SnackBar(
+            ft.Text(msg)
+        )
+
+        page.snack_bar.open = True
+
+        refresh()
+
+    refresh()
+
+    return ft.Column(
+        [
+            ft.Row(
+                [
+                    room_number,
+                    room_type,
+                    room_price,
+
+                    ft.ElevatedButton(
+                        "Add Room",
+                        icon=ft.Icons.ADD,
+                        on_click=add_click,
+                    ),
+                ]
+            ),
+
+            ft.Row(
+                [
+                    delete_room,
+
+                    ft.ElevatedButton(
+                        "Delete Room",
+                        icon=ft.Icons.DELETE,
+                        on_click=delete_click,
+                    ),
+                ]
+            ),
+
+            table,
+        ]
+    )
