@@ -1,122 +1,135 @@
 import flet as ft
 
 from hotel_data import (
-    get_revenue_report,
-    get_all_rooms,
-    get_rooms_by_status,
-    reservations,
+    rooms,
     guests,
+    reservations,
 )
 
+from components.stat_card import stat_card
+from components.room_card import room_card
+from components.activity_card import activity_card
 
-def stat_card(
-    title,
-    value,
-    icon,
-):
-    return ft.Container(
-        width=280,
-        padding=20,
-        border_radius=20,
-        bgcolor=ft.Colors.BLUE_GREY_900,
-        content=ft.Column(
-            [
-                ft.Icon(
-                    icon,
-                    size=40,
-                ),
 
-                ft.Text(
-                    title,
-                    size=18,
-                    weight=ft.FontWeight.BOLD,
-                ),
-
-                ft.Text(
-                    value,
-                    size=28,
-                ),
-            ]
-        ),
+def dashboard_view(page):
+    room_grid = ft.GridView(
+        runs_count=4,
+        spacing=10,
+        run_spacing=10,
+        expand=False,
+        height=400,
     )
 
-
-def dashboard_view(
-    page: ft.Page,
-):
-    content = ft.Row(
-        wrap=True,
-        spacing=20,
-    )
-
-    def refresh(e=None):
-        content.controls.clear()
-
-        report = get_revenue_report()
-
-        total_rooms = len(
-            get_all_rooms()
+    for room in rooms:
+        room_grid.controls.append(
+            room_card(room)
         )
 
-        occupied = len(
-            get_rooms_by_status(
-                "Occupied"
+    activity = ft.Column()
+
+    for reservation in reservations:
+        activity.controls.append(
+            activity_card(
+                reservation.guest.name,
+                f"Room {reservation.room.room_number}",
+                reservation.status,
             )
         )
 
-        occupancy = 0
-
-        if total_rooms > 0:
-            occupancy = (
-                occupied / total_rooms
-            ) * 100
-
-        content.controls.extend(
-            [
-                stat_card(
-                    "Total Revenue",
-                    f"${report['total']}",
-                    ft.Icons.ATTACH_MONEY,
-                ),
-
-                stat_card(
-                    "Reservations",
-                    str(
-                        len(
-                            reservations
-                        )
-                    ),
-                    ft.Icons.BOOK,
-                ),
-
-                stat_card(
-                    "Guests",
-                    str(len(guests)),
-                    ft.Icons.PEOPLE,
-                ),
-
-                stat_card(
-                    "Occupancy",
-                    f"{occupancy:.1f}%",
-                    ft.Icons.HOTEL,
-                ),
-            ]
-        )
-
-        page.update()
-
-    refresh()
-
     return ft.Column(
         [
-            ft.ElevatedButton(
-                "Refresh Dashboard",
-                icon=ft.Icons.REFRESH,
-                on_click=refresh,
+            ft.Text(
+                "Overview",
+                size=34,
+                weight=ft.FontWeight.BOLD,
             ),
 
             ft.Container(height=20),
 
-            content,
-        ]
+            ft.Row(
+                [
+                    stat_card(
+                        "Occupancy",
+                        f"{len(reservations)}%",
+                        ft.Icons.HOTEL,
+                        "#42C59A",
+                    ),
+
+                    stat_card(
+                        "Revenue",
+                        "$18,420",
+                        ft.Icons.ATTACH_MONEY,
+                        "#13294B",
+                    ),
+
+                    stat_card(
+                        "Check-ins",
+                        str(len(reservations)),
+                        ft.Icons.LOGIN,
+                        "#5B8DEF",
+                    ),
+                ],
+
+                wrap=True,
+            ),
+
+            ft.Container(height=30),
+
+            ft.Row(
+                [
+                    ft.Container(
+                        expand=1,
+
+                        bgcolor="white",
+
+                        border_radius=20,
+
+                        padding=20,
+
+                        content=ft.Column(
+                            [
+                                ft.Text(
+                                    "Room Status",
+                                    size=22,
+                                    weight=ft.FontWeight.BOLD,
+                                ),
+
+                                ft.Container(height=20),
+
+                                room_grid,
+                            ]
+                        ),
+                    ),
+
+                    ft.Container(
+                        width=400,
+
+                        bgcolor="white",
+
+                        border_radius=20,
+
+                        padding=20,
+
+                        content=ft.Column(
+                            [
+                                ft.Text(
+                                    "Today's Activity",
+                                    size=22,
+                                    weight=ft.FontWeight.BOLD,
+                                ),
+
+                                ft.Container(height=20),
+
+                                activity,
+                            ]
+                        ),
+                    ),
+                ],
+
+                expand=True,
+            ),
+        ],
+
+        expand=True,
+        scroll=ft.ScrollMode.AUTO,
     )
