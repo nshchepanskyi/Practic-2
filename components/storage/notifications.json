@@ -1,0 +1,22 @@
+[
+    {
+        "user": "Emma Wilson",
+        "message": "Requested extra towels for room 201"
+    },
+    {
+        "user": "Michael Brown",
+        "message": "Checked into room 305"
+    },
+    {
+        "user": "Sophia Davis",
+        "message": "Ordered breakfast service"
+    },
+    {
+        "user": "Daniel Taylor",
+        "message": "Requested airport transfer"
+    },
+    {
+        "user": "Olivia Anderson",
+        "message": "Extended reservation by 2 nights"
+    }
+]

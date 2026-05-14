@@ -1,5 +1,3 @@
-# components/topbar.py
-
 import flet as ft
 import random
 import json
@@ -39,7 +37,6 @@ def load_notifications():
 def topbar(
     page=None,
     go_to_reservations=None,
-    logout_callback=None,
 ):
     today = datetime.now().strftime("%A, %d %B %Y")
 
@@ -47,35 +44,8 @@ def topbar(
     random.shuffle(notifications)
     notifications = notifications[:5]
 
-    logout_dialog = ft.AlertDialog(modal=True)
-
-    def confirm_logout(e):
-        logout_dialog.open = False
-        page.update()
-        if logout_callback:
-            logout_callback()
-
-    def close_logout(e):
-        logout_dialog.open = False
-        page.update()
-
-    def open_logout_dialog(e):
-        page.dialog = logout_dialog
-        logout_dialog.title = ft.Text("Logout")
-        logout_dialog.content = ft.Text("Are you sure you want to logout?")
-        logout_dialog.actions = [
-            ft.TextButton("Cancel", on_click=close_logout),
-            ft.ElevatedButton(
-                "Logout",
-                bgcolor=ft.Colors.RED,
-                color=ft.Colors.WHITE,
-                on_click=confirm_logout,
-            ),
-        ]
-        logout_dialog.open = True
-        page.update()
-
     notification_items = []
+
     for item in notifications:
         user_name = item.get("user", "Unknown User")
         message = item.get("message", "No message")
@@ -95,6 +65,7 @@ def topbar(
                                     color=ft.Colors.WHITE,
                                 ),
                             ),
+
                             ft.Column(
                                 [
                                     ft.Text(
@@ -102,15 +73,18 @@ def topbar(
                                         size=14,
                                         weight=ft.FontWeight.BOLD,
                                     ),
+
                                     ft.Text(
                                         message,
                                         size=12,
                                         color=ft.Colors.BLUE_GREY_600,
                                     ),
                                 ],
+
                                 spacing=2,
                             ),
                         ],
+
                         spacing=12,
                     ),
                 )
@@ -124,61 +98,79 @@ def topbar(
         items=notification_items,
     )
 
-    profile_button = ft.PopupMenuButton(
-        icon=ft.Icons.ACCOUNT_CIRCLE,
-        icon_size=42,
-        tooltip="Profile",
-        items=[
-            ft.PopupMenuItem(
-                content=ft.Text("Logout"),
-                on_click=open_logout_dialog,
-            ),
-        ],
-    )
-
     return ft.Container(
         bgcolor=ft.Colors.WHITE,
-        padding=ft.Padding(left=28, right=28, top=14, bottom=14),
-        border=ft.Border(
-            bottom=ft.BorderSide(1, ft.Colors.BLUE_GREY_100)
+
+        padding=ft.Padding(
+            left=28,
+            right=28,
+            top=14,
+            bottom=14,
         ),
+
+        border=ft.Border(
+            bottom=ft.BorderSide(
+                1,
+                ft.Colors.BLUE_GREY_100,
+            )
+        ),
+
         content=ft.Row(
             [
                 ft.Column(
                     [
                         ft.Text(
                             "Hotel Dashboard",
+
                             size=24,
+
                             weight=ft.FontWeight.BOLD,
+
                             color=ft.Colors.BLUE_GREY_900,
                         ),
+
                         ft.Text(
                             today,
+
                             size=12,
+
                             color=ft.Colors.BLUE_GREY_500,
                         ),
                     ],
+
                     spacing=1,
                 ),
+
                 ft.Row(
                     [
                         ft.ElevatedButton(
                             "+ New Reservation",
+
                             bgcolor=ft.Colors.BLUE_600,
+
                             color=ft.Colors.WHITE,
-                            on_click=lambda e: go_to_reservations(),
+
+                            on_click=lambda e:
+                            go_to_reservations(),
+
                             style=ft.ButtonStyle(
                                 elevation=8,
+
                                 shadow_color=ft.Colors.BLUE_200,
-                                shape=ft.RoundedRectangleBorder(radius=14),
+
+                                shape=ft.RoundedRectangleBorder(
+                                    radius=14
+                                ),
                             ),
                         ),
+
                         notification_button,
-                        profile_button,
                     ],
+
                     spacing=14,
                 ),
             ],
+
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
         ),
     )

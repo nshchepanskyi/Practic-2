@@ -1,43 +1,46 @@
-# components/navbar.py
-
 import flet as ft
 
-from datetime import datetime
-
-
-PRIMARY = ft.Colors.BLUE_600
-PRIMARY_LIGHT = ft.Colors.BLUE_50
-
-TEXT_PRIMARY = ft.Colors.BLUE_GREY_900
-TEXT_SECONDARY = ft.Colors.BLUE_GREY_500
-
-BORDER = ft.Colors.BLUE_GREY_100
-
-HOVER = ft.Colors.BLUE_GREY_50
-
-
-# =====================================
-# GLOBAL ACTIVE PAGE
-# =====================================
 
 ACTIVE_PAGE_INDEX = 0
 
 
-def navbar(
-    change_page,
-):
+# =====================================
+# NAVBAR
+# =====================================
+
+def navbar(change_page, logout_callback):
 
     global ACTIVE_PAGE_INDEX
 
-    nav_items = []
+    nav_items = [
 
-    nav_data = [
-        (ft.Icons.DASHBOARD_OUTLINED, "Dashboard"),
-        (ft.Icons.MEETING_ROOM_OUTLINED, "Rooms"),
-        (ft.Icons.BOOK_OUTLINED, "Reservations"),
-        (ft.Icons.PEOPLE_OUTLINED, "Guests"),
-        (ft.Icons.ROOM_SERVICE_OUTLINED, "Services"),
+        {
+            "title": "Dashboard",
+            "icon": ft.Icons.DASHBOARD,
+        },
+
+        {
+            "title": "Rooms",
+            "icon": ft.Icons.HOTEL,
+        },
+
+        {
+            "title": "Reservations",
+            "icon": ft.Icons.BOOK_ONLINE,
+        },
+
+        {
+            "title": "Guests",
+            "icon": ft.Icons.PEOPLE,
+        },
+
+        {
+            "title": "Services",
+            "icon": ft.Icons.ROOM_SERVICE,
+        },
     ]
+
+    buttons = []
 
     # =====================================
     # UPDATE ACTIVE
@@ -45,42 +48,25 @@ def navbar(
 
     def update_active():
 
-        global ACTIVE_PAGE_INDEX
+        for i, btn in enumerate(buttons):
 
-        for i, item in enumerate(nav_items):
-
-            row = item.content
-
-            icon_control = row.controls[0]
-
-            text_control = row.controls[1]
-
-            # ACTIVE
             if i == ACTIVE_PAGE_INDEX:
 
-                item.bgcolor = PRIMARY_LIGHT
+                btn.bgcolor = ft.Colors.BLUE_600
 
-                icon_control.color = PRIMARY
+                btn.content.controls[0].color = ft.Colors.WHITE
 
-                text_control.color = PRIMARY
+                btn.content.controls[1].color = ft.Colors.WHITE
 
-                text_control.weight = ft.FontWeight.BOLD
-
-            # INACTIVE
             else:
 
-                item.bgcolor = ft.Colors.TRANSPARENT
+                btn.bgcolor = ft.Colors.TRANSPARENT
 
-                icon_control.color = TEXT_SECONDARY
+                btn.content.controls[0].color = ft.Colors.BLUE_GREY_700
 
-                text_control.color = TEXT_SECONDARY
+                btn.content.controls[1].color = ft.Colors.BLUE_GREY_700
 
-                text_control.weight = ft.FontWeight.W_500
-
-        try:
-            container.update()
-        except Exception:
-            pass
+        navbar_container.update()
 
     # =====================================
     # NAVIGATION
@@ -97,271 +83,132 @@ def navbar(
         change_page(index)
 
     # =====================================
-    # NAV BUTTON
+    # NAV BUTTONS
     # =====================================
 
-    def nav_button(
-        icon_name,
-        label,
-        index,
-    ):
+    for index, item in enumerate(nav_items):
 
-        icon_control = ft.Icon(
-            icon_name,
-            size=22,
-            color=TEXT_SECONDARY,
-        )
+        btn = ft.Container(
 
-        text_control = ft.Text(
-            label,
-            size=14,
-            color=TEXT_SECONDARY,
-            weight=ft.FontWeight.W_500,
-        )
+            border_radius=14,
 
-        button = ft.Container(
-
-            width=220,
-
-            height=54,
-
-            border_radius=16,
-
-            padding=ft.Padding(
-                left=18,
-                right=18,
-                top=0,
-                bottom=0,
-            ),
-
-            animate=250,
+            padding=12,
 
             ink=True,
 
+            on_click=lambda e, i=index:
+            navigate(i),
+
             content=ft.Row(
                 [
-                    icon_control,
-                    text_control,
+                    ft.Icon(
+                        item["icon"],
+                        size=22,
+                    ),
+
+                    ft.Text(
+                        item["title"],
+                        size=15,
+                        weight=ft.FontWeight.W_500,
+                    ),
                 ],
 
-                spacing=14,
-
-                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=12,
             ),
         )
 
-        # =====================================
-        # HOVER EFFECT
-        # =====================================
-
-        def hover_effect(e):
-
-            global ACTIVE_PAGE_INDEX
-
-            if index != ACTIVE_PAGE_INDEX:
-
-                if e.data == "true":
-
-                    button.bgcolor = HOVER
-
-                else:
-
-                    button.bgcolor = ft.Colors.TRANSPARENT
-
-                button.update()
-
-        button.on_hover = hover_effect
-
-        # =====================================
-        # CLICK
-        # =====================================
-
-        button.on_click = lambda e: navigate(index)
-
-        nav_items.append(button)
-
-        return button
+        buttons.append(btn)
 
     # =====================================
-    # DATE
+    # LOGOUT BUTTON
     # =====================================
 
-    today = datetime.now().strftime(
-        "%A, %d %b %Y"
-    )
+    logout_button = ft.Container(
 
-    # =====================================
-    # SIDEBAR
-    # =====================================
+        border_radius=14,
 
-    item_column = ft.Column(
-        [
-            # LOGO
-            ft.Container(
-                padding=ft.Padding(
-                    left=8,
-                    right=8,
-                    top=10,
-                    bottom=30,
+        padding=12,
+
+        bgcolor=ft.Colors.RED_500,
+
+        ink=True,
+
+        on_click=lambda e:
+        logout_callback(),
+
+        content=ft.Row(
+            [
+                ft.Icon(
+                    ft.Icons.LOGOUT,
+
+                    color=ft.Colors.WHITE,
+
+                    size=22,
                 ),
 
-                content=ft.Row(
-                    [
-                        ft.Container(
-                            width=46,
+                ft.Text(
+                    "Logout",
 
-                            height=46,
+                    color=ft.Colors.WHITE,
 
-                            bgcolor=PRIMARY,
+                    size=15,
 
-                            border_radius=14,
-
-                            alignment=ft.Alignment(
-                                0,
-                                0,
-                            ),
-
-                            content=ft.Text(
-                                "GS",
-
-                                color=ft.Colors.WHITE,
-
-                                size=16,
-
-                                weight=ft.FontWeight.BOLD,
-                            ),
-                        ),
-
-                        ft.Column(
-                            [
-                                ft.Text(
-                                    "GrandStay",
-
-                                    size=18,
-
-                                    weight=ft.FontWeight.BOLD,
-
-                                    color=TEXT_PRIMARY,
-                                ),
-
-                                ft.Text(
-                                    "HOTEL MANAGEMENT",
-
-                                    size=10,
-
-                                    color=TEXT_SECONDARY,
-
-                                    weight=ft.FontWeight.W_500,
-                                ),
-                            ],
-
-                            spacing=0,
-                        ),
-                    ],
-
-                    spacing=14,
+                    weight=ft.FontWeight.BOLD,
                 ),
-            ),
-
-            # NAVIGATION
-            *[
-                nav_button(
-                    icon,
-                    label,
-                    i,
-                )
-                for i, (
-                    icon,
-                    label,
-                ) in enumerate(nav_data)
             ],
 
-            ft.Container(expand=True),
-
-            # FOOTER
-            ft.Container(
-                padding=ft.Padding(
-                    left=8,
-                    right=8,
-                    top=14,
-                    bottom=14,
-                ),
-
-                content=ft.Column(
-                    [
-                        ft.Divider(
-                            height=1,
-                            color=BORDER,
-                        ),
-
-                        ft.Container(height=10),
-
-                        ft.Row(
-                            [
-                                ft.Container(
-                                    width=8,
-
-                                    height=8,
-
-                                    bgcolor=ft.Colors.GREEN,
-
-                                    border_radius=50,
-                                ),
-
-                                ft.Text(
-                                    "v2.0 Stable",
-
-                                    size=11,
-
-                                    color=TEXT_SECONDARY,
-                                ),
-                            ],
-
-                            spacing=6,
-                        ),
-
-                        ft.Text(
-                            today,
-
-                            size=10,
-
-                            color=ft.Colors.BLUE_GREY_400,
-                        ),
-                    ],
-
-                    spacing=4,
-                ),
-            ),
-        ],
-
-        spacing=6,
-
-        expand=True,
+            spacing=12,
+        ),
     )
 
-    container = ft.Container(
+    # =====================================
+    # NAVBAR CONTAINER
+    # =====================================
 
-        content=item_column,
+    navbar_container = ft.Container(
 
-        width=250,
+        width=260,
 
         bgcolor=ft.Colors.WHITE,
 
-        padding=ft.Padding(
-            left=14,
-            right=14,
-            top=16,
-            bottom=16,
-        ),
+        padding=20,
 
         border=ft.Border(
             right=ft.BorderSide(
                 1,
-                BORDER,
+                ft.Colors.BLUE_GREY_100,
             )
+        ),
+
+        content=ft.Column(
+            [
+                ft.Text(
+                    "GrandStay",
+
+                    size=28,
+
+                    weight=ft.FontWeight.BOLD,
+
+                    color=ft.Colors.BLUE_700,
+                ),
+
+                ft.Divider(
+                    color=ft.Colors.BLUE_GREY_100,
+                ),
+
+                *buttons,
+
+                ft.Container(expand=True),
+
+                ft.Divider(
+                    color=ft.Colors.BLUE_GREY_100,
+                ),
+
+                logout_button,
+            ],
+
+            spacing=10,
         ),
     )
 
-    update_active()
-
-    return container
+    return navbar_container

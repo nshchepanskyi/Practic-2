@@ -1,0 +1,18 @@
+[
+    {
+        "reservation_id": "R1",
+        "guest_id": "G1",
+        "room_number": "106",
+        "check_in": "2026-05-13",
+        "check_out": "2026-05-25",
+        "status": "Pending"
+    },
+    {
+        "reservation_id": "R2",
+        "guest_id": "G2",
+        "room_number": "101",
+        "check_in": "2026-05-09",
+        "check_out": "2026-05-25",
+        "status": "Pending"
+    }
+]

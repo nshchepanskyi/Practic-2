@@ -86,21 +86,29 @@ def main(page: ft.Page):
 
         main_content.content = ft.Row(
             [
-                navbar(change_page),
+                navbar(
+                    change_page,
+                    logout,
+                ),
+
                 ft.Column(
                     [
                         topbar(
                             page,
                             go_to_reservations,
-                            logout,
                         ),
+
                         dashboard_content,
                     ],
+
                     expand=True,
+
                     spacing=0,
                 ),
             ],
+
             expand=True,
+
             spacing=0,
         )
 
