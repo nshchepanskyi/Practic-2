@@ -1,65 +1,42 @@
 import flet as ft
 
 
-def stat_card(
-    title,
-    value,
-    icon,
-    color,
-):
+def stat_card(title, value, icon, color):
     return ft.Container(
-        width=260,
-        height=160,
-
-        bgcolor=ft.Colors.WHITE,
-
-        border_radius=22,
-
+        width=240,
+        bgcolor="white",
+        border_radius=14,
         padding=20,
-
-        shadow=ft.BoxShadow(
-            blur_radius=25,
-            color=ft.Colors.BLACK12,
+        border=ft.Border(
+            top=ft.BorderSide(1, "#E2E8F0"),
+            bottom=ft.BorderSide(1, "#E2E8F0"),
+            left=ft.BorderSide(1, "#E2E8F0"),
+            right=ft.BorderSide(1, "#E2E8F0"),
         ),
-
         content=ft.Column(
             [
                 ft.Row(
                     [
-                        ft.Text(
-                            title,
-                            size=16,
-                            color=ft.Colors.GREY_600,
-                        ),
-
+                        ft.Text(title, size=12, color="#64748B",
+                                weight=ft.FontWeight.W_500),
                         ft.Container(
-                            width=45,
-                            height=45,
-
-                            border_radius=14,
-
-                            bgcolor=color,
-
+                            width=36, height=36,
+                            border_radius=10,
+                            bgcolor=color + "1A",
                             alignment=ft.Alignment(0, 0),
-
-                            content=ft.Icon(
-                                icon,
-                                color=ft.Colors.WHITE,
-                            ),
+                            content=ft.Icon(icon, color=color, size=18),
                         ),
                     ],
-
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 ),
-
-                ft.Container(height=25),
-
+                ft.Container(height=12),
                 ft.Text(
                     value,
-                    size=34,
+                    size=30,
                     weight=ft.FontWeight.BOLD,
-                    color=ft.Colors.BLUE_GREY_900,
+                    color="#1E293B",
                 ),
-            ]
+            ],
+            spacing=0,
         ),
     )
