@@ -3,16 +3,16 @@ import os
 import re
 
 
-USERS_FILE = "users.json"
+STORAGE_DIR = "storage"
+
+if not os.path.exists(STORAGE_DIR):
+    os.makedirs(STORAGE_DIR)
+
+USERS_FILE = os.path.join(STORAGE_DIR, "users.json")
 
 
 class User:
-    def __init__(
-        self,
-        username,
-        email,
-        password,
-    ):
+    def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = password
@@ -24,19 +24,11 @@ users = []
 def load_users():
     global users
 
-    if not os.path.exists(
-        USERS_FILE
-    ):
-        with open(
-            USERS_FILE,
-            "w",
-        ) as f:
+    if not os.path.exists(USERS_FILE):
+        with open(USERS_FILE, "w") as f:
             json.dump([], f)
 
-    with open(
-        USERS_FILE,
-        "r",
-    ) as f:
+    with open(USERS_FILE, "r") as f:
         data = json.load(f)
 
     users = []
@@ -63,28 +55,25 @@ def save_users():
             }
         )
 
-    with open(
-        USERS_FILE,
-        "w",
-    ) as f:
-        json.dump(
-            data,
-            f,
-            indent=4,
-        )
+    with open(USERS_FILE, "w") as f:
+        json.dump(data, f, indent=4)
 
 
 def validate_email(email):
-    pattern = (
-        r"^[a-zA-Z0-9_.+-]+"
-        r"@[a-zA-Z0-9-]+"
-        r"\.[a-zA-Z0-9-.]+$"
-    )
+    try:
+        pattern = (
+            r"^[a-zA-Z0-9_.+-]+"
+            r"@[a-zA-Z0-9-]+"
+            r"\.[a-zA-Z0-9-.]+$"
+        )
 
-    return re.match(
-        pattern,
-        email,
-    )
+        if not re.match(pattern, email):
+            raise ValueError
+
+        return True
+
+    except Exception:
+        return False
 
 
 def validate_password(password):
@@ -95,85 +84,44 @@ def validate_username(username):
     return len(username) >= 3
 
 
-def register_user(
-    username,
-    email,
-    password,
-):
+def register_user(username, email, password):
     load_users()
 
-    if not validate_username(
-        username
-    ):
-        return (
-            False,
-            "Username must contain at least 3 characters",
-        )
+    if not validate_username(username):
+        return False, "Username must contain at least 3 characters"
 
     if not validate_email(email):
-        return (
-            False,
-            "Invalid email",
-        )
+        return False, "Invalid email"
 
-    if not validate_password(
-        password
-    ):
-        return (
-            False,
-            "Password must contain at least 6 characters",
-        )
+    if not validate_password(password):
+        return False, "Password must contain at least 6 characters"
 
     username_exists = next(
-        (
-            u
-            for u in users
-            if u.username == username
-        ),
+        (u for u in users if u.username == username),
         None,
     )
 
     if username_exists:
-        return (
-            False,
-            "Username already exists",
-        )
+        return False, "Username already exists"
 
     email_exists = next(
-        (
-            u
-            for u in users
-            if u.email == email
-        ),
+        (u for u in users if u.email == email),
         None,
     )
 
     if email_exists:
-        return (
-            False,
-            "Email already exists",
-        )
+        return False, "Email already exists"
 
-    user = User(
-        username,
-        email,
-        password,
-    )
+    user = User(username, email, password)
 
     users.append(user)
 
     save_users()
 
-    return (
-        True,
-        "Registration successful",
-    )
+    return True, "Registration successful"
 
 
-def login_user(
-    login,
-    password,
-):
+def login_user(login, password):
     load_users()
 
     user = next(
@@ -190,12 +138,6 @@ def login_user(
     )
 
     if not user:
-        return (
-            False,
-            "Invalid credentials",
-        )
+        return False, "Invalid credentials"
 
-    return (
-        True,
-        user,
-    )
+    return True, user

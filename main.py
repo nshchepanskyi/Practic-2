@@ -1,6 +1,8 @@
+# main.py
+
 import flet as ft
 
-from hotel_data import seed_data
+from hotel_data import load_all_data
 
 from components.navbar import navbar
 from components.topbar import topbar
@@ -15,7 +17,7 @@ from views.guests import guests_view
 from views.services import services_view
 
 
-BACKGROUND = "#F0F4F8"
+BACKGROUND = ft.Colors.BLUE_GREY_50
 
 
 def main(page: ft.Page):
@@ -24,16 +26,42 @@ def main(page: ft.Page):
     page.bgcolor = BACKGROUND
     page.window.width = 1700
     page.window.height = 950
+    page.window.maximized = True
     page.padding = 0
 
-    seed_data()
+    page.theme = ft.Theme(
+        color_scheme=ft.ColorScheme(
+            primary=ft.Colors.BLUE_600,
+            secondary=ft.Colors.CYAN_400,
+        ),
+    )
 
-    main_content = ft.Container(expand=True)
+    load_all_data()
 
-    def open_dashboard():
-        dashboard_content = ft.Container(expand=True, padding=24)
+    main_content = ft.Container(
+        expand=True,
+        animate_opacity=300,
+        animate_scale=300,
+    )
+
+    def open_dashboard(active_page=0):
+        from components import navbar as navbar_module
+        navbar_module.ACTIVE_PAGE_INDEX = active_page
+
+        dashboard_content = ft.Container(
+            expand=True,
+            padding=24,
+            animate_opacity=400,
+            animate_scale=300,
+        )
 
         def change_page(index):
+            from components import navbar as navbar_module
+            navbar_module.ACTIVE_PAGE_INDEX = index
+
+            dashboard_content.opacity = 0
+            page.update()
+
             if index == 0:
                 dashboard_content.content = dashboard_view(page)
             elif index == 1:
@@ -44,16 +72,28 @@ def main(page: ft.Page):
                 dashboard_content.content = guests_view(page)
             elif index == 4:
                 dashboard_content.content = services_view(page)
+
+            dashboard_content.opacity = 1
             page.update()
 
-        dashboard_content.content = dashboard_view(page)
+        def go_to_reservations():
+            change_page(2)
+
+        def logout():
+            open_login()
+
+        change_page(active_page)
 
         main_content.content = ft.Row(
             [
                 navbar(change_page),
                 ft.Column(
                     [
-                        topbar(page),
+                        topbar(
+                            page,
+                            go_to_reservations,
+                            logout,
+                        ),
                         dashboard_content,
                     ],
                     expand=True,
@@ -67,11 +107,18 @@ def main(page: ft.Page):
         page.update()
 
     def open_login():
-        main_content.content = login_view(page, open_register, open_dashboard)
+        main_content.content = login_view(
+            page,
+            open_register,
+            open_dashboard,
+        )
         page.update()
 
     def open_register():
-        main_content.content = register_view(page, open_login)
+        main_content.content = register_view(
+            page,
+            open_login,
+        )
         page.update()
 
     open_login()
