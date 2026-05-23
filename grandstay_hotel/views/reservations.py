@@ -74,9 +74,9 @@ def reservations_view(page):
 
     message = ft.Text()
 
-    # =====================================
-    # DATE PICKERS
-    # =====================================
+
+
+
 
     def _to_local_date(dt):
         if dt.tzinfo is not None:
@@ -126,9 +126,9 @@ def reservations_view(page):
 
         page.update()
 
-    # =====================================
-    # TABLE
-    # =====================================
+
+
+
 
     reservation_table = ft.DataTable(
         columns=[
@@ -152,9 +152,9 @@ def reservations_view(page):
         rows=[],
     )
 
-    # =====================================
-    # REFRESH ROOMS
-    # =====================================
+
+
+
 
     def refresh_rooms():
 
@@ -166,9 +166,9 @@ def reservations_view(page):
             if room.status == "Available"
         ]
 
-    # =====================================
-    # REFRESH TABLE
-    # =====================================
+
+
+
 
     def refresh():
 
@@ -219,9 +219,9 @@ def reservations_view(page):
 
         page.update()
 
-    # =====================================
-    # CREATE RESERVATION
-    # =====================================
+
+
+
 
     def create_click(e):
 

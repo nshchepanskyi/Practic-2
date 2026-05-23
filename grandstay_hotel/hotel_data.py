@@ -137,9 +137,9 @@ def create_default_rooms():
     save_rooms()
 
 
-# =========================
-# SAVE / LOAD ROOMS
-# =========================
+
+
+
 
 def save_rooms():
 
@@ -185,9 +185,9 @@ def load_rooms():
         )
 
 
-# =========================
-# SAVE / LOAD GUESTS
-# =========================
+
+
+
 
 def save_guests():
 
@@ -230,9 +230,9 @@ def load_guests():
         )
 
 
-# =========================
-# SAVE / LOAD RESERVATIONS
-# =========================
+
+
+
 
 def save_reservations():
 
@@ -300,9 +300,9 @@ def load_reservations():
             reservations.append(reservation)
 
 
-# =========================
-# ROOM FUNCTIONS
-# =========================
+
+
+
 
 def add_room(
     number,
@@ -346,9 +346,9 @@ def remove_room(number):
     save_rooms()
 
 
-# =========================
-# GUEST FUNCTIONS
-# =========================
+
+
+
 
 def create_guest(
     name,
@@ -370,9 +370,9 @@ def create_guest(
     return guest
 
 
-# =========================
-# RESERVATION FUNCTIONS
-# =========================
+
+
+
 
 def create_reservation(
     guest,
@@ -415,9 +415,9 @@ def create_reservation(
     return True
 
 
-# =========================
-# SERVICE FUNCTIONS
-# =========================
+
+
+
 
 def create_service_order(
     guest_id,
@@ -481,9 +481,9 @@ def update_service_order_status(
     return True
 
 
-# =========================
-# SAVE / LOAD SERVICE ORDERS
-# =========================
+
+
+
 
 def save_service_orders():
 
@@ -547,9 +547,9 @@ def load_service_orders():
         service_orders.append(order)
 
 
-# =========================
-# DASHBOARD FUNCTIONS
-# =========================
+
+
+
 
 def calc_reservation_revenue():
 
@@ -644,9 +644,9 @@ def get_services_summary():
     return list(summary.values())
 
 
-# =========================
-# LOAD ALL
-# =========================
+
+
+
 
 def load_all_data():
 

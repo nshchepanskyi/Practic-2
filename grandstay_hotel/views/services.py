@@ -93,9 +93,9 @@ def services_view(page):
         rows=[],
     )
 
-    # =====================================
-    # REFRESH GUESTS
-    # =====================================
+
+
+
 
     def refresh_guests():
 
@@ -107,9 +107,9 @@ def services_view(page):
             for g in guests
         ]
 
-    # =====================================
-    # STATUS CHANGE
-    # =====================================
+
+
+
 
     def change_status(order_id, status):
 
@@ -120,9 +120,9 @@ def services_view(page):
 
         refresh_orders()
 
-    # =====================================
-    # REFRESH ORDERS
-    # =====================================
+
+
+
 
     def refresh_orders():
 
@@ -217,9 +217,9 @@ def services_view(page):
 
         page.update()
 
-    # =====================================
-    # SERVICE CARD
-    # =====================================
+
+
+
 
     def make_service_card(svc):
 
@@ -321,9 +321,9 @@ def services_view(page):
         for s in SERVICES_CATALOG
     ]
 
-    # =====================================
-    # PLACE ORDER
-    # =====================================
+
+
+
 
     def place_order(e):
 
@@ -425,9 +425,9 @@ def services_view(page):
 
     refresh_orders()
 
-    # =====================================
-    # PANELS
-    # =====================================
+
+
+
 
     def panel(
         content,

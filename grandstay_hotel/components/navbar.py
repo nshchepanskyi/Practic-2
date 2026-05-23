@@ -7,9 +7,9 @@ from theme import get as C
 ACTIVE_PAGE_INDEX = 0
 
 
-# =====================================
-# NAVBAR
-# =====================================
+
+
+
 
 def navbar(change_page, logout_callback):
 
@@ -45,9 +45,9 @@ def navbar(change_page, logout_callback):
 
     buttons = []
 
-    # =====================================
-    # UPDATE ACTIVE
-    # =====================================
+
+
+
 
     def update_active():
 
@@ -71,9 +71,9 @@ def navbar(change_page, logout_callback):
 
         navbar_container.update()
 
-    # =====================================
-    # NAVIGATION
-    # =====================================
+
+
+
 
     def navigate(index):
 
@@ -85,9 +85,9 @@ def navbar(change_page, logout_callback):
 
         change_page(index)
 
-    # =====================================
-    # NAV BUTTONS
-    # =====================================
+
+
+
 
     for index, item in enumerate(nav_items):
 
@@ -122,9 +122,9 @@ def navbar(change_page, logout_callback):
 
         buttons.append(btn)
 
-    # =====================================
-    # LOGOUT BUTTON
-    # =====================================
+
+
+
 
     logout_button = ft.Container(
 
@@ -164,9 +164,9 @@ def navbar(change_page, logout_callback):
         ),
     )
 
-    # =====================================
-    # NAVBAR CONTAINER
-    # =====================================
+
+
+
 
     navbar_container = ft.Container(
 

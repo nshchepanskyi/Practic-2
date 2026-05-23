@@ -112,7 +112,7 @@ def dashboard_view(page):
 
     checked_in = sum(1 for r in reservations if r.status == 'Checked-In')
 
-    # ── KPI row ───────────────────────────────────────────────────────────────
+
     kpi_row = ft.Row(
         [
             _kpi_card(
@@ -139,7 +139,7 @@ def dashboard_view(page):
         spacing=14,
     )
 
-    # ── recent reservations table ─────────────────────────────────────────────
+
     AVATAR_COLORS = [
         ft.Colors.BLUE_100, ft.Colors.GREEN_100, ft.Colors.YELLOW_100,
         ft.Colors.PINK_100, ft.Colors.PURPLE_100,
@@ -268,7 +268,7 @@ def dashboard_view(page):
         padding=22,
     )
 
-    # ── room grid ─────────────────────────────────────────────────────────────
+
     room_grid = ft.GridView(
         runs_count=8,
         spacing=10,
@@ -304,7 +304,7 @@ def dashboard_view(page):
         padding=22,
     )
 
-    # ── services summary ──────────────────────────────────────────────────────
+
     svc_summary = get_services_summary()
     max_rev = max((s["revenue"] for s in svc_summary), default=1)
 
@@ -353,7 +353,7 @@ def dashboard_view(page):
         padding=22,
     )
 
-    # ── assemble ──────────────────────────────────────────────────────────────
+
     return ft.Column(
         [
             kpi_row,

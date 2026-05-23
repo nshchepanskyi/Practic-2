@@ -3,7 +3,7 @@ CURRENT_LANG = "en"
 TRANSLATIONS = {
     "en": {},
     "uk": {
-        # Auth
+
         "Username or Email": "Ім'я користувача або Email",
         "Password": "Пароль",
         "GrandStay Login": "Вхід GrandStay",
@@ -13,7 +13,7 @@ TRANSLATIONS = {
         "Enter password": "Введіть пароль",
         "Invalid credentials": "Невірні дані",
         "Invalid email": "Невірний email",
-        # Register
+
         "Username": "Ім'я користувача",
         "Email": "Email",
         "Confirm Password": "Підтвердіть пароль",
@@ -28,7 +28,7 @@ TRANSLATIONS = {
         "Password must contain at least 6 characters": "Пароль має містити щонайменше 6 символів",
         "Username already exists": "Ім'я користувача вже існує",
         "Email already exists": "Email вже існує",
-        # Navbar
+
         "GrandStay": "GrandStay",
         "Dashboard": "Панель керування",
         "Rooms": "Номери",
@@ -36,11 +36,11 @@ TRANSLATIONS = {
         "Guests": "Гості",
         "Services": "Послуги",
         "Logout": "Вийти",
-        # Topbar
+
         "Hotel Dashboard": "Панель готелю",
         "+ New Reservation": "+ Нове бронювання",
         "Notifications": "Сповіщення",
-        # Dashboard KPI
+
         "OCCUPANCY": "ЗАЙНЯТІСТЬ",
         "AVAILABLE ROOMS": "ВІЛЬНІ НОМЕРИ",
         "ARRIVALS TODAY": "ПРИБУТТЯ СЬОГОДНІ",
@@ -49,7 +49,7 @@ TRANSLATIONS = {
         "+2 Ready for cleaning": "+2 Готові до прибирання",
         "{count} Checked-in so far": "{count} заселилися",
         "Rooms ${res_rev:,.0f}  ·  Services ${svc_rev:,.0f}": "Номери ${res_rev:,.0f}  ·  Послуги ${svc_rev:,.0f}",
-        # Dashboard table
+
         "Recent Reservations": "Останні бронювання",
         "VIEW ALL RECORDS": "ПЕРЕГЛЯНУТИ ВСІ",
         "GUEST NAME": "ІМ'Я ГОСТЯ",
@@ -58,17 +58,17 @@ TRANSLATIONS = {
         "STATUS": "СТАТУС",
         "AMOUNT": "СУМА",
         "No reservations yet": "Бронювань ще немає",
-        # Dashboard room status
+
         "Room Status": "Статус номерів",
         "Available": "Вільний",
         "Occupied": "Зайнятий",
         "Cleaning": "Прибирання",
         "Maintenance": "Обслуговування",
-        # Dashboard services
+
         "Services Revenue": "Дохід від послуг",
         "{count} orders": "{count} замовлень",
         "No service orders yet.": "Замовлень послуг ще немає.",
-        # Status badges
+
         "Pending": "Очікує",
         "Checked-In": "Заселений",
         "Checked-Out": "Виселений",
@@ -77,7 +77,7 @@ TRANSLATIONS = {
         "In Progress": "В процесі",
         "Completed": "Виконано",
         "Cancelled": "Скасовано",
-        # Rooms
+
         "Add Room": "Додати номер",
         "Room Number": "Номер кімнати",
         "Room Type": "Тип номера",
@@ -94,7 +94,7 @@ TRANSLATIONS = {
         "Room {number} not found": "Номер {number} не знайдено",
         "Room {number} deleted": "Номер {number} видалено",
         "Cannot delete room {number} — it has active reservations": "Не можна видалити номер {number} — є активні бронювання",
-        # Reservations
+
         "Create Reservation": "Створити бронювання",
         "Guest Name": "Ім'я гостя",
         "Code": "Код",
@@ -113,12 +113,12 @@ TRANSLATIONS = {
         "Check out must be later": "Виїзд має бути пізніше заїзду",
         "Reservation created": "Бронювання створено",
         "Reservation failed": "Помилка бронювання",
-        # Guests
+
         "Guest List": "Список гостей",
         "Guest ID": "ID гостя",
         "Name": "Ім'я",
         "Phone": "Телефон",
-        # Services
+
         "Service Catalog": "Каталог послуг",
         "Service Orders": "Замовлення послуг",
         "Select Guest": "Виберіть гостя",
@@ -139,7 +139,7 @@ TRANSLATIONS = {
         "{count} order created": "{count} замовлення створено",
         "{count} orders created": "{count} замовлень створено",
         "Failed to create orders": "Не вдалося створити замовлення",
-        # Service names
+
         "Breakfast": "Сніданок",
         "Laundry": "Пральня",
         "Spa": "Спа",
@@ -153,9 +153,9 @@ TRANSLATIONS = {
         "Conference Room": "Конференц-зал",
         "Movie Rental": "Прокат фільмів",
         "Bicycle Rental": "Прокат велосипедів",
-        # Other model messages
+
         "Guest not found": "Гостя не знайдено",
-        # Topbar title
+
         "Services": "Послуги",
         "Rooms": "Номери",
         "Reservations": "Бронювання",
