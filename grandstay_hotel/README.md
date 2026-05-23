@@ -1,37 +1,53 @@
-# GrandStay Hotel Management System
+GrandStay Hotel Management System
 
-A Python-based CLI application for managing hotel operations, including room management, guest bookings, service tracking, and financial reporting.
+A Flet-based desktop application for managing hotel operations, including room management, guest bookings, service tracking, multi-language support, and dark/light theme.
 
-## Project Structure
+Project Structure
 
 ```
 grandstay_hotel/
+├── components/
+│   ├── topbar.py          # App bar with theme & language toggles
+│   ├── navbar.py          # Side navigation
+│   ├── room_card.py       # Room status card widget
+│   ├── stat_card.py       # KPI stat card widget
+│   └── activity_card.py   # Activity timeline card
 ├── views/
-│   ├── dashboard.py     # Reports and analytics views
-│   ├── reservations.py  # Guest and booking interaction logic
-│   └── rooms.py         # Room management views
-├── hotel_data.py        # Core data models and storage logic
-├── main.py              # Application entry point
-├── requirements.txt     # Dependency list (Standard Library only for now)
-└── README.md            # Project documentation
+│   ├── dashboard.py       # Main dashboard with KPIs & tables
+│   ├── reservations.py    # Reservation CRUD & booking forms
+│   ├── rooms.py           # Room management (add/remove/status)
+│   ├── services.py        # Multi-service ordering with quantities
+│   ├── guests.py          # Guest directory
+│   ├── login.py           # Authentication login
+│   └── register.py        # User registration
+├── storage/               # JSON data files (rooms, reservations, guests, etc.)
+├── hotel_data.py          # Core data models, storage logic, business logic
+├── l10n.py                # Localization (EN/UK) with tr() function
+├── theme.py               # Dark/light color palettes via ft.Colors
+├── auth.py                # Simple password-based authentication
+├── main.py                # Application entry point
+└── users.json             # User credentials storage
 ```
 
-## Features
+Features
 
-1. **Room Management**: Add, remove, and track statuses of all hotel rooms.
-2. **Reservation System**: Handle the full booking lifecycle (Pending -> Checked-In -> Checked-Out).
-3. **Guest Management**: Maintain a searchable database of hotel guests and their contact info.
-4. **Service Accounting**: Track additional service costs (Spa, Breakfast, etc.) per guest.
-5. **Detailed Reports**: View revenue, occupancy rates, and guest activity summaries.
+1. Room Management: Add, remove, and track statuses (Available, Occupied, Cleaning, Maintenance).
+2. Reservation System: Full booking lifecycle (Pending -> Checked-In -> Checked-Out) with calendar date picker.
+3. Guest Management: Searchable database of hotel guests and their contact info.
+4. Service Accounting: Multi-select service ordering with per-item quantities (Spa, Breakfast, Gym, Pool, Parking, Room Service, Mini Bar, Dry Cleaning, Conference Room, Movie Rental, Bicycle Rental).
+5. Dashboard: KPI cards (occupancy, revenue, arrivals), recent reservations table, room status grid, services revenue summary.
+6. Dark/Light Theme: Toggle via button in top bar, persistent color scheme using ft.Colors constants.
+7. Language Toggle: Switch between English and Ukrainian, all UI strings translated via tr().
+8. Authentication: Login/register with password protection.
 
-## How to Run
-
-Navigate to the project directory and run:
+How to Run
 
 ```bash
-python main.py
+pip install flet
+python grandstay_hotel/main.py
 ```
 
-## Future Extensibility
+Storage
 
-This project is designed as a backend-first logic layer. All data processing functions in `hotel_data.py` return data structures instead of prints, making it easy to swap the current CLI views in the `views/` folder with a **Flet** GUI or a web interface in the future.
+All data is persisted to JSON files in grandstay_hotel/storage/:
+- rooms.json, reservations.json, guests.json, service_orders.json, notifications.json, users.json
