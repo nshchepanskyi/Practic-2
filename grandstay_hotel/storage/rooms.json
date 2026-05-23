@@ -1,38 +1,32 @@
 [
     {
-        "room_number": "1",
+        "room_number": "101",
         "room_type": "Single",
-        "price": 12.0,
-        "status": "Occupied"
-    },
-    {
-        "room_number": "2",
-        "room_type": "Double",
-        "price": 123.0,
-        "status": "Occupied"
-    },
-    {
-        "room_number": "3",
-        "room_type": "Double",
-        "price": 123.0,
+        "price": 50,
         "status": "Available"
     },
     {
-        "room_number": "4",
-        "room_type": "Double",
-        "price": 123.0,
+        "room_number": "102",
+        "room_type": "Single",
+        "price": 50,
         "status": "Available"
     },
     {
-        "room_number": "5",
+        "room_number": "201",
         "room_type": "Double",
-        "price": 123.0,
+        "price": 80,
         "status": "Available"
     },
     {
-        "room_number": "6",
+        "room_number": "202",
         "room_type": "Double",
-        "price": 123.0,
+        "price": 80,
+        "status": "Available"
+    },
+    {
+        "room_number": "301",
+        "room_type": "Suite",
+        "price": 150,
         "status": "Available"
     }
 ]

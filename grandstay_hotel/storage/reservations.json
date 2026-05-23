@@ -1,18 +1,1 @@
-[
-    {
-        "reservation_id": "R1",
-        "guest_id": "G1",
-        "room_number": "1",
-        "check_in": "2026-05-22",
-        "check_out": "2026-05-23",
-        "status": "Pending"
-    },
-    {
-        "reservation_id": "R2",
-        "guest_id": "G2",
-        "room_number": "2",
-        "check_in": "2026-05-23",
-        "check_out": "2026-05-24",
-        "status": "Pending"
-    }
-]
+[]
