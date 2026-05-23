@@ -1,0 +1,38 @@
+[
+    {
+        "room_number": "1",
+        "room_type": "Single",
+        "price": 12.0,
+        "status": "Occupied"
+    },
+    {
+        "room_number": "2",
+        "room_type": "Double",
+        "price": 123.0,
+        "status": "Occupied"
+    },
+    {
+        "room_number": "3",
+        "room_type": "Double",
+        "price": 123.0,
+        "status": "Available"
+    },
+    {
+        "room_number": "4",
+        "room_type": "Double",
+        "price": 123.0,
+        "status": "Available"
+    },
+    {
+        "room_number": "5",
+        "room_type": "Double",
+        "price": 123.0,
+        "status": "Available"
+    },
+    {
+        "room_number": "6",
+        "room_type": "Double",
+        "price": 123.0,
+        "status": "Available"
+    }
+]

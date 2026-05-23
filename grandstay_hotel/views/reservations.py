@@ -1,94 +1,476 @@
-"""
-views/reservations.py - Interaction logic for Reservations and Guest Management.
-"""
+import flet as ft
+
+from auth import validate_email
 
 from hotel_data import (
-    create_reservation, check_in_guest, check_out_guest, add_guest, 
-    search_guests, reservations, get_guest_by_id, add_service_to_guest, services
+    create_guest,
+    create_reservation,
+    reservations,
+    rooms,
 )
+from l10n import tr
+from theme import get as C
 
-def show_reservations_menu():
-    while True:
-        print("\n--- Reservations & Guests ---")
-        print("1. Create New Reservation")
-        print("2. Check-In Guest")
-        print("3. Check-Out Guest")
-        print("4. Add New Guest")
-        print("5. Search Guest")
-        print("6. Add Service to Guest")
-        print("7. View All Reservations")
-        print("0. Back to Main Menu")
-        
-        choice = input("Select an option: ")
-        
-        if choice == '1':
-            name = input("Guest Name: ")
-            phone = input("Phone: ")
-            email = input("Email: ")
-            guest = add_guest(name, phone, email)
-            
-            room_num = input("Room Number: ")
-            check_in = input("Check-in Date (YYYY-MM-DD): ")
-            check_out = input("Check-out Date (YYYY-MM-DD): ")
-            
-            success, result = create_reservation(guest.guest_id, room_num, check_in, check_out)
-            if success:
-                print(f"Reservation created! ID: {result.res_id}")
-            else:
-                print(f"Error: {result}")
-                
-        elif choice == '2':
-            res_id = input("Enter Reservation ID: ")
-            success, msg = check_in_guest(res_id)
-            print(msg)
-            
-        elif choice == '3':
-            res_id = input("Enter Reservation ID: ")
-            success, msg = check_out_guest(res_id)
-            print(msg)
-            
-        elif choice == '4':
-            name = input("Name: ")
-            phone = input("Phone: ")
-            email = input("Email: ")
-            guest = add_guest(name, phone, email)
-            print(f"Guest added. ID: {guest.guest_id}")
-            
-        elif choice == '5':
-            query = input("Search by name, email, or phone: ")
-            found = search_guests(query)
-            if found:
-                for g in found:
-                    print(f"ID: {g.guest_id} | Name: {g.name} | Email: {g.email}")
-            else:
-                print("No guests found.")
-                
-        elif choice == '6':
-            g_id = input("Guest ID: ")
-            print("Available Services:")
-            for i, s in enumerate(services):
-                print(f"{i+1}. {s['name']} (${s['price']})")
-            s_choice = int(input("Select service #: ")) - 1
-            if 0 <= s_choice < len(services):
-                success, msg = add_service_to_guest(g_id, services[s_choice]['name'])
-                print(msg)
-            else:
-                print("Invalid service choice.")
-                
-        elif choice == '7':
-            display_reservations()
-            
-        elif choice == '0':
-            break
+
+def reservations_view(page):
+
+    guest_name = ft.TextField(
+        label=tr("Guest Name"),
+        width=250,
+    )
+
+    COUNTRIES = [
+        ("+380", "UA"),
+        ("+1", "US"),
+        ("+44", "UK"),
+        ("+49", "DE"),
+        ("+33", "FR"),
+        ("+48", "PL"),
+        ("+39", "IT"),
+        ("+34", "ES"),
+        ("+90", "TR"),
+        ("+81", "JP"),
+        ("+86", "CN"),
+        ("+91", "IN"),
+    ]
+
+    country_code = ft.Dropdown(
+        width=150,
+        label=tr("Code"),
+        value="+380",
+        options=[
+            ft.dropdown.Option(key=code, text=f"{cc} {code}")
+            for code, cc in COUNTRIES
+        ],
+    )
+
+    phone_number = ft.TextField(
+        label=tr("Phone Number"),
+        width=200,
+    )
+
+    guest_email = ft.TextField(
+        label=tr("Email"),
+        width=250,
+    )
+
+    room_number = ft.Dropdown(
+        label=tr("Available Rooms"),
+        width=250,
+        options=[],
+    )
+
+    check_in = ft.TextField(
+        label=tr("Check In"),
+        read_only=True,
+        width=200,
+    )
+
+    check_out = ft.TextField(
+        label=tr("Check Out"),
+        read_only=True,
+        width=200,
+    )
+
+    message = ft.Text()
+
+    # =====================================
+    # DATE PICKERS
+    # =====================================
+
+    def _to_local_date(dt):
+        if dt.tzinfo is not None:
+            dt = dt.astimezone()
+        return dt.strftime("%Y-%m-%d")
+
+    def set_check_in(e):
+
+        if e.control.value:
+
+            check_in.value = _to_local_date(
+                e.control.value
+            )
+
+            page.update()
+
+    def set_check_out(e):
+
+        if e.control.value:
+
+            check_out.value = _to_local_date(
+                e.control.value
+            )
+
+            page.update()
+
+    check_in_picker = ft.DatePicker(
+        on_change=set_check_in,
+    )
+
+    check_out_picker = ft.DatePicker(
+        on_change=set_check_out,
+    )
+
+    page.overlay.append(check_in_picker)
+    page.overlay.append(check_out_picker)
+
+    def open_check_in(e):
+
+        check_in_picker.open = True
+
+        page.update()
+
+    def open_check_out(e):
+
+        check_out_picker.open = True
+
+        page.update()
+
+    # =====================================
+    # TABLE
+    # =====================================
+
+    reservation_table = ft.DataTable(
+        columns=[
+            ft.DataColumn(
+                ft.Text(tr("Reservation"))
+            ),
+
+            ft.DataColumn(
+                ft.Text(tr("Guest"))
+            ),
+
+            ft.DataColumn(
+                ft.Text(tr("Room"))
+            ),
+
+            ft.DataColumn(
+                ft.Text(tr("Status"))
+            ),
+        ],
+
+        rows=[],
+    )
+
+    # =====================================
+    # REFRESH ROOMS
+    # =====================================
+
+    def refresh_rooms():
+
+        room_number.options = [
+            ft.dropdown.Option(
+                room.room_number
+            )
+            for room in rooms
+            if room.status == "Available"
+        ]
+
+    # =====================================
+    # REFRESH TABLE
+    # =====================================
+
+    def refresh():
+
+        reservation_table.rows.clear()
+
+        refresh_rooms()
+
+        for reservation in reservations:
+
+            reservation_table.rows.append(
+                ft.DataRow(
+                    cells=[
+                        ft.DataCell(
+                            ft.Text(
+                                reservation.reservation_id
+                            )
+                        ),
+
+                        ft.DataCell(
+                            ft.Text(
+                                reservation.guest.name
+                            )
+                        ),
+
+                        ft.DataCell(
+                            ft.Text(
+                                reservation.room.room_number
+                            )
+                        ),
+
+                        ft.DataCell(
+                            ft.Container(
+                                padding=8,
+
+                                border_radius=12,
+
+                                bgcolor=ft.Colors.BLUE_GREY_900,
+
+                                content=ft.Text(
+                                    tr(reservation.status),
+                                    color=ft.Colors.WHITE,
+                                ),
+                            )
+                        ),
+                    ]
+                )
+            )
+
+        page.update()
+
+    # =====================================
+    # CREATE RESERVATION
+    # =====================================
+
+    def create_click(e):
+
+        if not guest_name.value:
+
+            message.value = tr("Enter guest name")
+
+            message.color = "red"
+
+            page.update()
+
+            return
+
+        if not guest_email.value:
+
+            message.value = tr("Enter email")
+
+            message.color = "red"
+
+            page.update()
+
+            return
+
+        if not validate_email(
+            guest_email.value
+        ):
+
+            message.value = tr("Invalid email")
+
+            message.color = "red"
+
+            page.update()
+
+            return
+
+        if not room_number.value:
+
+            message.value = tr("Select room")
+
+            message.color = "red"
+
+            page.update()
+
+            return
+
+        if not check_in.value:
+
+            message.value = tr(
+                "Select check in date"
+            )
+
+            message.color = "red"
+
+            page.update()
+
+            return
+
+        if not check_out.value:
+
+            message.value = tr(
+                "Select check out date"
+            )
+
+            message.color = "red"
+
+            page.update()
+
+            return
+
+        if check_out.value <= check_in.value:
+
+            message.value = tr(
+                "Check out must be later"
+            )
+
+            message.color = "red"
+
+            page.update()
+
+            return
+
+        full_phone = (
+            f"{country_code.value}"
+            f"{phone_number.value}"
+        )
+
+        guest = create_guest(
+            guest_name.value,
+            full_phone,
+            guest_email.value,
+        )
+
+        success = create_reservation(
+            guest,
+            room_number.value,
+            check_in.value,
+            check_out.value,
+        )
+
+        if success:
+
+            message.value = tr(
+                "Reservation created"
+            )
+
+            message.color = "green"
+
+            guest_name.value = ""
+
+            phone_number.value = ""
+
+            guest_email.value = ""
+
+            room_number.value = None
+
+            check_in.value = ""
+
+            check_out.value = ""
+
         else:
-            print("Invalid choice.")
 
-def display_reservations():
-    if not reservations:
-        print("No reservations on record.")
-        return
-    
-    print(f"{'Res ID':<10} {'Guest ID':<10} {'Room':<6} {'In':<12} {'Out':<12} {'Status':<12}")
-    print("-" * 65)
-    for r in reservations:
-        print(f"{r.res_id:<10} {r.guest_id:<10} {r.room_number:<6} {r.check_in_date:<12} {r.check_out_date:<12} {r.status:<12}")
+            message.value = tr(
+                "Reservation failed"
+            )
+
+            message.color = "red"
+
+        refresh()
+
+    refresh()
+
+    return ft.Column(
+        [
+                ft.Text(
+                    tr("Reservations"),
+                    size=34,
+                    weight=ft.FontWeight.BOLD,
+                ),
+
+            ft.Container(height=20),
+
+            ft.Container(
+                bgcolor=C("surface"),
+
+                border_radius=20,
+
+                padding=20,
+
+                content=ft.Column(
+                    [
+                        ft.Text(
+                            tr("Create Reservation"),
+                            size=22,
+                            weight=ft.FontWeight.BOLD,
+                        ),
+
+                        ft.Container(height=20),
+
+                        ft.Row(
+                            [
+                                guest_name,
+
+                                country_code,
+
+                                phone_number,
+
+                                guest_email,
+                            ],
+
+                            wrap=True,
+                        ),
+
+                        ft.Container(height=15),
+
+                        ft.Row(
+                            [
+                                room_number,
+
+                                ft.Row(
+                                    [
+                                        check_in,
+
+                                        ft.IconButton(
+                                            icon=ft.Icons.CALENDAR_MONTH,
+                                            on_click=open_check_in,
+                                        ),
+                                    ]
+                                ),
+
+                                ft.Row(
+                                    [
+                                        check_out,
+
+                                        ft.IconButton(
+                                            icon=ft.Icons.CALENDAR_MONTH,
+                                            on_click=open_check_out,
+                                        ),
+                                    ]
+                                ),
+
+                                ft.ElevatedButton(
+                                    tr("Create"),
+
+                                    icon=ft.Icons.ADD,
+
+                                    height=50,
+
+                                    on_click=create_click,
+                                ),
+                            ],
+
+                            wrap=True,
+                        ),
+
+                        ft.Container(height=10),
+
+                        message,
+                    ]
+                ),
+            ),
+
+            ft.Container(height=20),
+
+            ft.Container(
+                bgcolor=C("surface"),
+
+                border_radius=20,
+
+                padding=20,
+
+                expand=True,
+
+                content=ft.Column(
+                    [
+                        ft.Text(
+                            tr("Reservation List"),
+                            size=22,
+                            weight=ft.FontWeight.BOLD,
+                        ),
+
+                        ft.Container(height=20),
+
+                        reservation_table,
+                    ]
+                ),
+            ),
+        ],
+
+        scroll=ft.ScrollMode.AUTO,
+
+        expand=True,
+    )

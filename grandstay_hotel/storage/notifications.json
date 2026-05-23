@@ -1,0 +1,42 @@
+[
+    {
+        "user": "Emma Wilson",
+        "message": "Requested extra towels for room 201"
+    },
+    {
+        "user": "Michael Brown",
+        "message": "Checked into room 305"
+    },
+    {
+        "user": "Sophia Davis",
+        "message": "Ordered breakfast service"
+    },
+    {
+        "user": "Daniel Taylor",
+        "message": "Requested airport transfer"
+    },
+    {
+        "user": "Olivia Anderson",
+        "message": "Extended reservation by 2 nights"
+    },
+    {
+        "user": "James Miller",
+        "message": "Requested room cleaning"
+    },
+    {
+        "user": "Ava Thomas",
+        "message": "Spa appointment booked"
+    },
+    {
+        "user": "William Moore",
+        "message": "Payment completed successfully"
+    },
+    {
+        "user": "Charlotte Martin",
+        "message": "Laundry service requested"
+    },
+    {
+        "user": "Benjamin Jackson",
+        "message": "Late check-out approved"
+    }
+]
