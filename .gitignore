@@ -1,9 +1,7 @@
-venv/
-.venv/
-.idea/
-__pycache__/
+*.zip
 *.pyc
-.env
-dist/
-build/
+__pycache__/
 *.log
+err.txt
+out.txt
+extensions.txt
